@@ -1,0 +1,159 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct _node
+{
+	int data;
+	struct _node* next;
+}Node;
+
+typedef struct CList
+{
+	Node* tail;		// 꼬리 위치 포인터
+	int NodeCnt;	// 데이터 개수 확인
+}List;
+
+//초기화함수
+void ListInit(List* plist)
+{
+	plist->tail = NULL;	// 꼬리포인터 초기화
+	plist->NodeCnt = 0;	// 데이터 개수 초기화
+}
+
+//리스트 프린트 함수 
+void PrintList(List* plist)
+{
+	Node* head = plist->tail->next;
+	if (plist->NodeCnt != 0)
+	{
+		for (int i = 0; i < plist->NodeCnt; i++)
+		{
+			printf("%d ", head->data);
+			head = head->next;
+		}
+		printf("\n");
+	}
+}
+//마지막에 삽입
+void LInsert(List* plist, int data)
+{
+	//1 노드생성
+	//2 데이터 값넣기
+	//3 링크부 초기화
+	//4-1 노드가 하나도 없을때
+	//4-2 노드가 하나이상 있을때
+	//5 데이터 개수 증가
+	Node* new = (Node*)malloc(sizeof(Node));
+	if (new == NULL)
+	{
+		printf("메모리 공간부족");
+		exit(1);
+	}
+	new->data = data;
+	new->next = NULL;
+
+	//4-1 노드가 하나도 없을때
+	if (plist->tail == NULL)
+	{
+		plist->tail = new;
+		new->next = new;
+	}
+	//4-2 노드가 하나이상 있을때
+	else
+	{
+		new->next = plist->tail->next;
+		plist->tail->next = new;
+		plist->tail = new;
+	}
+	//5 데이터 개수 증가
+	plist->NodeCnt++;
+}
+
+//처음에 삽입
+void LInsertFront(List* plist, int data)
+{
+	//동적할당  + 값삽입 
+	Node* newNode = (Node*)malloc(sizeof(Node));
+	if (newNode == NULL)
+	{
+		printf("메모리 공간부족");
+		exit(1);
+	}
+	newNode->data = data;
+	newNode->next = NULL;
+
+
+	//노드가 하나도 없을때
+	if (plist->tail == NULL)
+	{
+		plist->tail = newNode;
+		newNode->next = newNode;
+	}
+	//노드가 하나이상 있을때
+	else
+	{
+		newNode->next = plist->tail->next;
+		plist->tail->next = newNode;
+	}
+	//데이터 개수 증가
+	plist->NodeCnt++;
+}
+
+
+//조회 함수
+Node* SearchNode(List* plist, int target)
+{
+	
+
+}
+
+//삭제 함수
+int LRemove(List* plist, int target)
+{
+	
+}
+
+int main(void)
+{
+	//-----------------------------------
+	// 원형 연결 리스트의 생성 및 초기화 
+	//-----------------------------------
+	List list;
+	int data, i, nodeNum;
+	ListInit(&list);
+	int num;
+
+	//-----------------------------------
+	// 끝노드에 연결 /////// 
+	//-----------------------------------
+	printf("\n--------(1) 끝 노드에 연결 ---------\n");
+	LInsert(&list, 3);
+	LInsert(&list, 4);
+	LInsert(&list, 5);
+	PrintList(&list);
+
+	//-----------------------------------
+	// 첫노드에 연결 /////// 
+	//-----------------------------------
+	printf("\n--------(2) 첫 노드에 연결 ---------\n");
+	LInsertFront(&list, 2);
+	LInsertFront(&list, 1);
+	PrintList(&list);
+
+	
+	//-----------------------------------
+	//저장된 데이터 조회///////
+	//-----------------------------------
+	printf("\n--------(3) 데이터 조회 ---------\n");
+	printf("값 입력[조회] : ");
+	scanf_s("%d", &num);
+	Node* cur = SearchNode(&list, num);
+	if (cur == NULL)
+		printf("입력한 값과 일치하는 데이터는 없습니다\n");
+	else
+		printf("입력한 값 %d 가 존재합니다\n", cur->data);
+
+
+	
+	return 0;
+}
